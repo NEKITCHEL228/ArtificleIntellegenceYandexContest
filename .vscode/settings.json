@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/5_task/.venv/Scripts/python.exe",
+    "jupyter.notebookFileRoot": "${workspaceFolder}/5_task"
+}
