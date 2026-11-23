@@ -635,22 +635,30 @@ int main() {
             });
         }
 
+        if (evals.empty()) return valid[0];
+
         sort(evals.begin(), evals.end(), [](const CandEval& a, const CandEval& b) {
-            if (abs(a.surv_weight - b.surv_weight) > 1e-6) return a.surv_weight > b.surv_weight;
-            if (abs(a.exp_val - b.exp_val) > 1e-4) return a.exp_val > b.exp_val;
-            return a.exp_margin > b.exp_margin;
+            if (a.surv_weight != b.surv_weight) return a.surv_weight > b.surv_weight;
+            if (a.exp_val != b.exp_val) return a.exp_val > b.exp_val;
+            if (a.exp_margin != b.exp_margin) return a.exp_margin > b.exp_margin;
+            return a.cand < b.cand;
         });
 
         if (evals[0].surv_weight <= 0) {
             sort(evals.begin(), evals.end(), [](const CandEval& a, const CandEval& b) {
-                if (abs(a.exp_margin - b.exp_margin) > 1e-4) return a.exp_margin > b.exp_margin;
+                if (a.exp_margin != b.exp_margin) return a.exp_margin > b.exp_margin;
                 double ra = (double)item_v[a.cand] / item_m[a.cand];
                 double rb = (double)item_v[b.cand] / item_m[b.cand];
-                return ra > rb;
+                if (ra != rb) return ra > rb;
+                return a.cand < b.cand;
             });
         }
 
-        return evals[0].cand;
+        int chosen = evals[0].cand;
+        if (chosen < 1 || chosen > N || !((avail >> chosen) & 1) || item_m[chosen] > cap0) {
+            chosen = valid[0];
+        }
+        return chosen;
     };
 
     for (int r = 1; r <= T; ++r) {
