@@ -238,8 +238,8 @@ int main() {
         // --- LANDMARK LOWER BOUND & TRIANGLE INEQUALITY SHORTCUT ---
         int best_lb = manhattan;
         int best_ub = 1e9;
-        int active_lm1 = -1, active_lm2 = -1, active_lm3 = -1;
-        int max_lb1 = -1, max_lb2 = -1, max_lb3 = -1;
+        int active_lm1 = -1, active_lm2 = -1;
+        int max_lb1 = -1, max_lb2 = -1;
 
         for (int i = 0; i < num_landmarks; ++i) {
             const int* d_ptr = &lm_flat[i * N_pad];
@@ -252,14 +252,13 @@ int main() {
                 if (sum_ub < best_ub) best_ub = sum_ub;
 
                 if (diff_lb > max_lb1) {
-                    max_lb3 = max_lb2; active_lm3 = active_lm2;
-                    max_lb2 = max_lb1; active_lm2 = active_lm1;
-                    max_lb1 = diff_lb; active_lm1 = i;
+                    max_lb2 = max_lb1;
+                    active_lm2 = active_lm1;
+                    max_lb1 = diff_lb;
+                    active_lm1 = i;
                 } else if (diff_lb > max_lb2) {
-                    max_lb3 = max_lb2; active_lm3 = active_lm2;
-                    max_lb2 = diff_lb; active_lm2 = i;
-                } else if (diff_lb > max_lb3) {
-                    max_lb3 = diff_lb; active_lm3 = i;
+                    max_lb2 = diff_lb;
+                    active_lm2 = i;
                 }
             }
         }
@@ -324,13 +323,11 @@ int main() {
             }
             for (int i = 0; i < 4; ++i) bucket[i].clear();
         } else {
-            // Path B: Landmark-guided search with top 3 active landmarks
+            // Path B: Landmark-guided search with top 2 active landmarks
             const int lm1_t = (active_lm1 != -1) ? lm_flat[active_lm1 * N_pad + t] : -1;
             const int lm2_t = (active_lm2 != -1) ? lm_flat[active_lm2 * N_pad + t] : -1;
-            const int lm3_t = (active_lm3 != -1) ? lm_flat[active_lm3 * N_pad + t] : -1;
             const int* dist_lm1 = (active_lm1 != -1) ? &lm_flat[active_lm1 * N_pad] : nullptr;
             const int* dist_lm2 = (active_lm2 != -1) ? &lm_flat[active_lm2 * N_pad] : nullptr;
-            const int* dist_lm3 = (active_lm3 != -1) ? &lm_flat[active_lm3 * N_pad] : nullptr;
 
             auto calc_h = [&](int u, int ux, int uy) -> int {
                 int h = abs(ux - tx) + abs(uy - ty);
@@ -341,10 +338,6 @@ int main() {
                 if (dist_lm2 && dist_lm2[u] != -1) {
                     int h2 = abs(dist_lm2[u] - lm2_t);
                     if (h2 > h) h = h2;
-                }
-                if (dist_lm3 && dist_lm3[u] != -1) {
-                    int h3 = abs(dist_lm3[u] - lm3_t);
-                    if (h3 > h) h = h3;
                 }
                 return h;
             };
