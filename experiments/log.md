@@ -35,3 +35,19 @@
   - Verification across all 20,000 queries in 4 distinct topologies: **100% exact match (0 mismatches)**.
 - **Reviewer Verdict**: `APPROVE` (provably admissible and consistent triangle inequality heuristic, clean MaxMin FPS initialization in $\sim 0.15$s, memory $\sim 268$MB well under 2048MB limit, C++20 compliant, immediate interactive `fflush(stdout)` preserved).
 - **Status**: `COMMITTED`
+
+---
+
+## Iteration 3 (Task 2: 2. Миллионы путей)
+- **Timestamp**: 2026-11-23 14:48:00 UTC
+- **Task ID**: `2_task`
+- **Hypothesis**: HYP-03: Composite ALT exploration:
+  - Evaluated multi-component allocation, upper-bound termination, and direct-mapped query cache.
+  - Empirical benchmarking revealed that on large random grids ($4 \times 10^{11}$ pair space), hash caching adds L2/L3 cache misses with 0% hit rate, while inner-loop upper bound branches cause branch mispredictions.
+  - Successfully integrated **Top-3 Active Landmark Steering** (`active_lm1, active_lm2, active_lm3`) without array overhead.
+- **Benchmark Result**:
+  - Open Grid: **14,599 qps vs 13,363 qps (1.09x speedup)**.
+  - Maze: **4,581 qps vs 4,417 qps (1.04x speedup)**.
+  - Exact match verification: **0 mismatches / 40,000 queries (100% precision)**.
+- **Reviewer Verdict**: `APPROVE` (clean register-based Top-3 active landmarks, zero memory overhead, 100% precision).
+- **Status**: `COMMITTED`
