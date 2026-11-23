@@ -1,0 +1,2 @@
+iteration,task_id,timestamp,git_commit,hypothesis_id,cv_metric,metric_name,train_time_sec,ram_peak_gb,vram_peak_gb,optimizer_verdict,reviewer_verdict,status
+0,5_task,2026-11-23T12:00:00Z,baseline,BASE-00,1.2500,loss,12.5,0.45,0.0,APPROVE,APPROVE,BENCHMARK

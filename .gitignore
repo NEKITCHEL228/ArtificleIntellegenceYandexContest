@@ -25,6 +25,11 @@ env/
 5_task/val/
 5_task/test/
 *.npz
+5_task/train.zip
+5_task/val.zip
+5_task/test.zip
+*.tar.gz
+*.tar
 
 # Temporary evaluation binaries
 5_task/tmp_*.bin
