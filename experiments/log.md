@@ -51,3 +51,19 @@
   - Exact match verification: **0 mismatches / 40,000 queries (100% precision)**.
 - **Reviewer Verdict**: `APPROVE` (clean register-based Top-3 active landmarks, zero memory overhead, 100% precision).
 - **Status**: `COMMITTED`
+
+---
+
+## Iteration 4 (Task 1: 1. Жадные гномы)
+- **Timestamp**: 2026-11-23 15:34:00 UTC
+- **Task ID**: `1_task`
+- **Hypothesis**: HYP-04 + HYP-05: C++20 Bitset Engine with Lookahead Beam Search & Complete Bot Universe:
+  - Ported solver to C++20 (`1_task/best_ver.cpp`) using 128-bit item masks (`unsigned __int128`) for $O(1)$ set ops.
+  - Expanded bot universe to 16 archetypes (including `safe_w1`, `safe_w2`, `safe_w3`, `beat_max_v`, `beat_max_ratio`, `knapsack_w`, `knapsack_w1`, `knapsack_w2`, `min_m`), fixing the fatal tie vulnerability on `safe_w2`.
+  - Implemented Lookahead Beam Search (beam width 12–16) combined with 7 static seed rollouts (`TARGET_W1`, `TARGET_W2`, `TARGET_W3`, `GREEDY_RATIO`, `GREEDY_V`, `STAY_LIGHT`, `MIN_M`), evaluating 100% of candidate items in every round.
+- **Benchmark Result**:
+  - 60 randomized games: **6.375 / 10.0** | **100.0% Survival (60/60)** | Time: 3.94s.
+  - 100 randomized games: **6.360 / 10.0** | **100.0% Survival (100/100)** | Time: 6.68s (~0.06s per full interactive game).
+  - Relative to Python baseline (`best_ver.py` @ 5.550): **+0.810 score gain**, survival increased from 96.7% to 100.0%, runtime reduced by $>10\times$.
+- **Reviewer Verdict**: `APPROVE` (provably safe from TL, $O(1)$ bitset operations, zero memory leaks, interactive flush protocol verified, dragon tie-death logic strictly adhered to).
+- **Status**: `COMMITTED`
