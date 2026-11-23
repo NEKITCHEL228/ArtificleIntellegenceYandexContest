@@ -98,3 +98,25 @@
   - Code size reduced from ~700 lines to ~350 lines.
 - **Reviewer Verdict**: `APPROVE` (clean, compact, robust, high arena score, zero UB).
 - **Status**: `COMMITTED`
+
+## Iteration 7 - Problem 4 Baseline (best_ver.cpp)
+- **Task ID**: `4_task`
+- **Hypothesis**: `BASE-04` (Initial baseline submission 173313827 on Yandex Contest achieved 3.246 / 10.0 using 4-stage optimization: portfolio, beam search, simulated annealing with prefix cache, coordinate descent).
+- **Benchmark Result**:
+  - Yandex Contest: **3.246 / 10.0** (Verdict: OK on all 110 tests).
+- **Status**: `BENCHMARK`
+
+## Iteration 8 - Hardware-Accelerated SA and Full Time Budget Utilization (best_ver.cpp)
+- **Task ID**: `4_task`
+- **Hypothesis**: `HYP-07` (Accelerating gradient computations via unified `sincos` and precomputing `inv_h` + `two_a_nu` yields a ~1.24x speedup per step. Combining this with full utilization of the 5.0-second time budget (`TIME_LIMIT = 4.65s`, `SA_END = 4.10s`) and a global schedule scaling mutation ($\alpha_t \leftarrow \alpha_t \cdot e^\delta$) enables ~25% more SA iterations and superior schedule calibration across heterogeneous functions).
+- **Modifications**:
+  - Replaced separate `sin()` and `cos()` evaluations with unified cross-platform hardware `my_sincos` (`__builtin_sincos` on GCC Linux, `__sincos` on Apple Clang).
+  - Precalculated `two_a_nu = 2.0 * a * nu` and `inv_h = 1.0 / h`, replacing floating-point divisions with multiplications.
+  - Added Mutation 0 (Global Schedule Scaling): scales entire schedule by $e^\delta$, calibrating magnitude across diverse $\lambda_i$.
+  - Extended wall-clock time limit from 4.45s (which halted prematurely around 3.70s) to `TIME_LIMIT = 4.65s` / `SA_END = 4.10s`.
+  - Maintained full 5-delta coordinate polish `{0.4, 0.15, 0.05, 0.015, 0.004}` with per-step `elapsed() < TIME_LIMIT` bounds checks.
+- **Benchmark Result**:
+  - Across 8 randomized arena tests: Average score increased from **4.8490** to **4.8783** (+0.0293 delta).
+  - Maximum test ($N=64, d=8, T=128$): score **5.4904 / 10.0** in **4.65s** (zero timeout risk).
+- **Reviewer Verdict**: `APPROVE` (strict sub-5s execution, verified cross-platform GCC 14.1 compatibility, zero data corruption).
+- **Status**: `COMMITTED`
