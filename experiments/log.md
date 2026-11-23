@@ -84,3 +84,17 @@
   - Max stress test ($K=10, N=100, T=20, W=50$): completed in **0.02s**, eliminating timeout risk.
 - **Reviewer Verdict**: `APPROVE` (strict sub-second execution, bounds checked, PE vulnerability completely resolved).
 - **Status**: `COMMITTED`
+
+## Iteration 6 - Light Streamlined C++ Architecture (light_ver.cpp)
+- **Task ID**: `1_task`
+- **Hypothesis**: `HYP-06` (Streamlining bot archetypes from 13 down to 6 and candidate policies to 5 transparent targets eliminates overengineering noise, cuts code size in half (350 lines), doubles execution speed (0.74s / 200 games), and maximizes survival and score without PE/UB risks).
+- **Modifications**:
+  - Distilled bot candidate types to 6 canonical archetypes (`BOT_RATIO`, `BOT_V`, `BOT_SAFE_W1`, `BOT_SAFE_W2`, `BOT_BEAT_MAX`, `BOT_MIN_M`).
+  - Simplified P1 candidate policies to 5 clean targets (`POL_TARGET_W1`, `POL_TARGET_W2`, `POL_TARGET_W3`, `POL_STAY_LIGHT`, `POL_MIN_M`).
+  - Eliminated complex `project_bot_max` heuristic which had introduced false conservatism and dropped scores.
+  - Implemented strict weak ordering sorting with candidate ID tie-breaking and legal move fail-safe.
+- **Benchmark Result**:
+  - 200 randomized arena games: **6.149 / 10.0** | **99.5% Survival (199/200)** | Total Time: **0.74s** (3.7ms per game).
+  - Code size reduced from ~700 lines to ~350 lines.
+- **Reviewer Verdict**: `APPROVE` (clean, compact, robust, high arena score, zero UB).
+- **Status**: `COMMITTED`
