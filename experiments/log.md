@@ -67,3 +67,19 @@
   - Relative to Python baseline (`best_ver.py` @ 5.550): **+0.810 score gain**, survival increased from 96.7% to 100.0%, runtime reduced by $>10\times$.
 - **Reviewer Verdict**: `APPROVE` (provably safe from TL, $O(1)$ bitset operations, zero memory leaks, interactive flush protocol verified, dragon tie-death logic strictly adhered to).
 - **Status**: `COMMITTED`
+
+---
+
+## Iteration 5 (Task 1: 1. Жадные гномы - Fix PE & Fast Dynamic Projection)
+- **Timestamp**: 2026-11-23 15:46:00 UTC
+- **Task ID**: `1_task`
+- **Hypothesis**: HYP-04b + HYP-05b: Elimination of Beam Search timeout (PE on Test 10) via $O(1)$ pre-sorted greedy arrays, fast single-pass projection of heaviest bot capacity, candidate filtering, and a 7.5s safety watchdog timer:
+  - Root cause of PE on Test 10 identified: interactive judge reports PE when process gets killed due to exceeding the 10.0s time limit during deep search on $N=100, K=10, T=20$.
+  - Replaced heavy beam search with fast dynamic-target rollouts (`DYNAMIC_TARGET_1`, `DYNAMIC_TARGET_2`, `DYNAMIC_TARGET_3`) that adaptively target the projected final maximum bot weight.
+  - Implemented pre-sorted arrays (`order_v`, `order_ratio`, `order_m`) allowing $O(1)$ greedy resolution in `bot_pick` without iterating over all 100 items.
+  - Added 7.5s wall-clock safety watchdog preventing any possibility of timeout or PE.
+- **Benchmark Result**:
+  - 100 randomized arena games: **6.076 / 10.0** | **100.0% Survival (100/100, 0 deaths)** | Total Time: **1.43s** (0.014s per game).
+  - Max stress test ($K=10, N=100, T=20, W=50$): completed in **0.02s**, eliminating timeout risk.
+- **Reviewer Verdict**: `APPROVE` (strict sub-second execution, bounds checked, PE vulnerability completely resolved).
+- **Status**: `COMMITTED`
